@@ -19,7 +19,7 @@ dependencies:
   connectivity: ^0.4.3+7
   http: ^0.12.0+2
   # Local cache
-  shared_preferences: ^0.5.3+4
+  shared_preferences:
   flutter:
     sdk: flutter
 
