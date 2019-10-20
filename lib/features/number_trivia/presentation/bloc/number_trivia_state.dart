@@ -16,8 +16,8 @@ class Loaded extends NumberTriviaState {
   Loaded({@required this.numberTrivia}) : super([numberTrivia]);
 }
 
-class Error extends NumberTriviaState {
+class ErrorState extends NumberTriviaState {
   final String message;
 
-  Error({@required this.message}) : super([message]);
+  ErrorState({@required this.message}) : super([message]);
 }
