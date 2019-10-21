@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:trivia_numbers/core/error/failures.dart';
 import 'package:trivia_numbers/core/usecases/usecase.dart';
 import 'package:trivia_numbers/core/util/input_converter.dart';
+import 'package:trivia_numbers/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:trivia_numbers/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
 import 'package:trivia_numbers/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
 
@@ -38,6 +40,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
   Stream<NumberTriviaState> mapEventToState(
     NumberTriviaEvent event,
   ) async* {
+    print('event is: $event');
     if (event is GetTriviaForConcreteNumber) {
       final convertedEither =
           inputConverter.stringToUnsignedInteger(event.numberString);
@@ -46,15 +49,26 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
         yield ErrorState(message: INVALID_INPUT_FAILURE_MSG);
       }, (integer) async* {
         yield Loading();
-        final numberTriviaEither =
+        final failureOrTrivia =
             await getConcreteNumberTrivia(Params(number: integer));
 
-        yield numberTriviaEither.fold(
-            (failure) =>
-                ErrorState(message: _mapFailureToErrorMessage(failure)),
-            (numberTrivia) => Loaded(numberTrivia: numberTrivia));
+        yield* _eitherLoadedOrErrorState(failureOrTrivia);
       });
+    } else if (event is GetTriviaForRandomNumber) {
+      yield Loading();
+      final failureOrTrivia = await getRandomNumberTrivia(NoParams());
+
+      yield* _eitherLoadedOrErrorState(failureOrTrivia);
     }
+  }
+
+  Stream<NumberTriviaState> _eitherLoadedOrErrorState(
+    Either<Failure, NumberTrivia> failureOrTrivia,
+  ) async* {
+    yield failureOrTrivia.fold(
+      (failure) => ErrorState(message: _mapFailureToErrorMessage(failure)),
+      (trivia) => Loaded(numberTrivia: trivia),
+    );
   }
 
   String _mapFailureToErrorMessage(Failure failure) {
