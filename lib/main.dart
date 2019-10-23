@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'injection_container.dart' as di;
 
-void main() => runApp(App());
+void main() async {
+  await di.init();
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   @override
@@ -31,4 +35,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
