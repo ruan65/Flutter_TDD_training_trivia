@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_numbers/features/number_trivia/presentation/bloc/bloc.dart';
+import 'package:trivia_numbers/features/number_trivia/presentation/pages/screens/trivia_controls.dart';
 import 'package:trivia_numbers/features/number_trivia/presentation/pages/screens/widgets.dart';
 import 'package:trivia_numbers/injection_container.dart';
 
@@ -11,7 +12,7 @@ class NumberTriviaScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Number Trivia'),
       ),
-      body: buildBody(context),
+      body: SingleChildScrollView(child: buildBody(context),),
     );
   }
 
@@ -41,25 +42,7 @@ class NumberTriviaScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 10),
-              Column(
-                children: <Widget>[
-                  Placeholder(
-                    fallbackHeight: 40,
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Placeholder(fallbackHeight: 30),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Placeholder(fallbackHeight: 30),
-                      ),
-                    ],
-                  )
-                ],
-              )
+              TriviaControls(),
               // Bottom half
             ],
           ),

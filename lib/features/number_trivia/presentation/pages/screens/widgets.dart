@@ -30,7 +30,7 @@ Widget messageDisplay(String msg, double h) {
 }
 
 Widget loadingWidget(double h) => Container(
-      height: h,
+      height: h / 3,
       child: Center(
         child: CircularProgressIndicator(),
       ),
